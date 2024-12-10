@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Domain
+namespace Services.Dtos
 {
-    public class Holding
+    public class HoldingDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Symbol { get; set; }
-        public Transaction? Transaction { get; set; }
-        public Summary? Summary { get; set; }
+        public TransactionDto? Transaction { get; set; }
+        public SummaryDto? Summary { get; set; }
     }
 }

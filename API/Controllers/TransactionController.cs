@@ -2,6 +2,7 @@
 using Data.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Services.Logic.Interface;
 
 namespace API.Controllers
 {
@@ -9,26 +10,26 @@ namespace API.Controllers
     [ApiController]
     public class TransactionController : ControllerBase
     {
-        private readonly ITransactionRepository _transaction;
+        private readonly ITransactionService _transactionService;
 
-        public TransactionController(ITransactionRepository transaction)
+        public TransactionController(ITransactionService transactionService)
         {
-            _transaction = transaction;
+            _transactionService = transactionService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllTransactions()
         {
-            var holdings = await _transaction.GetAllTransactionsAsyc();
+            var holdings = await _transactionService.GetAllTransactionsAsyc();
             return Ok(holdings);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateTransaction([FromBody] Holding holding)
-        {
-            var newholding = await _transaction.CreateTransactionAsyc(holding);
-            return Ok(newholding);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> CreateTransaction([FromBody] Holding holding)
+        //{
+        //    var newholding = await _transaction.CreateTransactionAsyc(holding);
+        //    return Ok(newholding);
+        //}
 
     }
 }
