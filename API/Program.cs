@@ -1,4 +1,6 @@
 using Data.AppDbContext;
+using Data.Repository.Implementation;
+using Data.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,8 @@ builder.Services.AddDbContext<DividendDashDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("dbConnection"));
 });
+
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
