@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Data.Domain;
 using Data.Repository.Interface;
 using Services.Dtos;
 using Services.Logic.Interface;
@@ -26,19 +27,38 @@ namespace Services.Logic.Implementation
             {
                 var holdings = await _transactionRepository.GetAllTransactionsAsyc();
 
-                if (holdings == null)
+                if (holdings != null)
                 {
-                    return null;
+                    List<HoldingDto> holdingDtos = new();
+
+                    foreach (var holding in holdings)
+                    {
+                        holdingDtos.Add(_mapper.Map<HoldingDto>(holding));
+                    }
+
+                    return holdingDtos;                   
                 }
 
-                List<HoldingDto> holdingDtos = new();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
-                foreach (var holding in holdings)
+        public async Task<HoldingDto?> GetTransactionByIdAsyc(Guid id)
+        {
+            try
+            {
+                var holding = await _transactionRepository.GetTransactionByIdAsyc(id);
+
+                if (holding != null)
                 {
-                    holdingDtos.Add(_mapper.Map<HoldingDto>(holding));
-                }
+                    return _mapper.Map<HoldingDto>(holding);
+                }               
 
-                return holdingDtos;
+                return null;
             }
             catch (Exception ex)
             {

@@ -24,12 +24,13 @@ namespace API.Controllers
             return Ok(holdings);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateTransaction([FromBody] Holding holding)
-        //{
-        //    var newholding = await _transaction.CreateTransactionAsyc(holding);
-        //    return Ok(newholding);
-        //}
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetTransactionById([FromRoute] Guid id)
+        {
+            var holding = await _transactionService.GetTransactionByIdAsyc(id);
+            return Ok(holding);
+        }
 
     }
 }

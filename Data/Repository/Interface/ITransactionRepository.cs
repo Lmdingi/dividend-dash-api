@@ -11,5 +11,6 @@ namespace Data.Repository.Interface
     {
         Task<Holding?> CreateTransactionAsyc(Holding holding);
         Task<List<Holding?>?> GetAllTransactionsAsyc();
+        Task<Holding?> GetTransactionByIdAsyc(Guid id);
     }
 }

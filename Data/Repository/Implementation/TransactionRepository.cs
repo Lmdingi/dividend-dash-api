@@ -42,11 +42,11 @@ namespace Data.Repository.Implementation
         /// </summary>
         /// <returns>List of Holdings with full details.</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Task<List<Holding?>?> GetAllTransactionsAsyc()
+        public async Task<List<Holding?>?> GetAllTransactionsAsyc()
         {
             try
             {
-                var holdings = _dbContext.Holdings
+                var holdings = await _dbContext.Holdings
                 .Include(h => h.Transaction)
                 .Include(h => h.Summary)
                 .ToListAsync();
@@ -64,6 +64,35 @@ namespace Data.Repository.Implementation
                 return null;
             }           
 
+        }
+
+        /// <summary>
+        /// get a holding with full details by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A full detailed holding</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<Holding?> GetTransactionByIdAsyc(Guid id)
+        {
+            try
+            {
+                var holding = await _dbContext.Holdings
+                    .Include(h => h.Transaction)
+                    .Include(h => h.Summary)
+                    .FirstOrDefaultAsync(h => h.Id == id);
+
+                if (holding != null)
+                {
+                    return holding;
+                }
+
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }
