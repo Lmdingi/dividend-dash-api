@@ -65,5 +65,26 @@ namespace Services.Logic.Implementation
                 return null;
             }
         }
+
+        public async Task<HoldingDto?> UpdateTransactionAsyc(HoldingDto holdingDto)
+        {
+            try
+            {
+                var holding = _mapper.Map<Holding>(holdingDto);
+
+                holding = await _transactionRepository.UpdateTransactionAsyc(holding);
+
+                if (holding == null)
+                {
+                    return null;
+                }
+
+                return _mapper.Map<HoldingDto>(holding);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

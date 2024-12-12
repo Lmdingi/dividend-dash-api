@@ -2,6 +2,7 @@
 using Data.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Services.Dtos;
 using Services.Logic.Interface;
 
 namespace API.Controllers
@@ -20,16 +21,29 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllTransactions()
         {
-            var holdings = await _transactionService.GetAllTransactionsAsyc();
-            return Ok(holdings);
+            var holdingDtos = await _transactionService.GetAllTransactionsAsyc();
+            return Ok(holdingDtos);
         }
 
         [HttpGet]
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetTransactionById([FromRoute] Guid id)
         {
-            var holding = await _transactionService.GetTransactionByIdAsyc(id);
-            return Ok(holding);
+            var holdingDto = await _transactionService.GetTransactionByIdAsyc(id);
+            return Ok(holdingDto);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateTransaction([FromBody] HoldingDto holdingDto)
+        {
+            if(holdingDto == null)
+            {
+                return BadRequest();
+            }
+
+            await _transactionService.UpdateTransactionAsyc(holdingDto);
+
+            return Ok(holdingDto);
         }
 
     }

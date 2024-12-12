@@ -94,5 +94,21 @@ namespace Data.Repository.Implementation
                 return null;
             }
         }
+
+        public async Task<Holding?> UpdateTransactionAsyc(Holding holding)
+        {
+            try
+            {
+                
+                _dbContext.Update(holding);
+                await _dbContext.SaveChangesAsync();
+
+                return holding;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }
