@@ -6,6 +6,7 @@ namespace Services.Logic.Interface
     {
         Task<List<HoldingDto?>?> GetAllTransactionsAsyc();
         Task<HoldingDto?> GetTransactionByIdAsyc(Guid id);
-        Task<HoldingDto?> UpdateTransactionAsyc(HoldingDto holding);
+        Task<HoldingDto?> UpdateTransactionAsyc(HoldingDto holdingDto);
+        Task<HoldingDto?> CreateTransactionTransactionAsyc(HoldingDto holdingDto);
     }
 }

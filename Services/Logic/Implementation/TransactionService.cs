@@ -21,6 +21,31 @@ namespace Services.Logic.Implementation
             _transactionRepository = transactionRepository;
             _mapper = mapper;
         }
+
+        public async Task<HoldingDto?> CreateTransactionTransactionAsyc(HoldingDto holdingDto)
+        {
+            try
+            {
+
+                holdingDto.Transaction.OpeningTotal = holdingDto.Transaction.Opening + holdingDto.Transaction.OpeningCharges;
+
+                var holding = _mapper.Map<Holding>(holdingDto);
+
+                holding = await _transactionRepository.UpdateTransactionAsyc(holding);
+
+                if (holding == null)
+                {
+                    return null;
+                }
+
+                return _mapper.Map<HoldingDto>(holding);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<List<HoldingDto?>?> GetAllTransactionsAsyc()
         {
             try

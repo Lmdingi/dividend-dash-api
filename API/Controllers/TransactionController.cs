@@ -46,5 +46,18 @@ namespace API.Controllers
             return Ok(holdingDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateTransaction([FromBody] HoldingDto holdingDto)
+        {
+            if (holdingDto == null)
+            {
+                return BadRequest();
+            }
+
+            await _transactionService.CreateTransactionTransactionAsyc(holdingDto);
+
+            return Ok(holdingDto);
+        }
+
     }
 }
