@@ -9,6 +9,8 @@ namespace Data.Domain
     public class Transaction
     {
         public Guid Id { get; set; }
+        public Guid HoldingId { get; set; }
+        public Holding? Holding { get; set; }
         public decimal Opening { get; set; }
         public decimal OpeningCharges { get; set; }
         public decimal OpeningTotal { get; set; }

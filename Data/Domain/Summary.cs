@@ -9,7 +9,8 @@ namespace Data.Domain
     public class Summary
     {
         public Guid Id { get; set; }
-
+        public Guid HoldingId { get; set; }
+        public Holding? Holding { get; set; }
         public DateOnly ExDate { get; set; }
         public DateOnly DividendDate { get; set; }
         public decimal Dividend { get; set; }

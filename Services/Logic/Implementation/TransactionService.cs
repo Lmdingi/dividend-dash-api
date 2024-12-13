@@ -22,7 +22,8 @@ namespace Services.Logic.Implementation
             _mapper = mapper;
         }
 
-        public async Task<HoldingDto?> CreateTransactionTransactionAsyc(HoldingDto holdingDto)
+
+        public async Task<HoldingDto?> CreateTransactionAsyc(HoldingDto holdingDto)
         {
             try
             {
@@ -32,6 +33,26 @@ namespace Services.Logic.Implementation
                 var holding = _mapper.Map<Holding>(holdingDto);
 
                 holding = await _transactionRepository.UpdateTransactionAsyc(holding);
+
+                if (holding == null)
+                {
+                    return null;
+                }
+
+                return _mapper.Map<HoldingDto>(holding);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<HoldingDto?> DeleteTransactionById(Guid? holdingId)
+        {
+            try
+            {
+
+                var holding = await _transactionRepository.DeleteTransactionById(holdingId);
 
                 if (holding == null)
                 {

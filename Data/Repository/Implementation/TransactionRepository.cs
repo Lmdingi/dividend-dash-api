@@ -38,6 +38,36 @@ namespace Data.Repository.Implementation
         }
 
         /// <summary>
+        /// Remove holding from database.
+        /// </summary>
+        /// <param name="holding"></param>
+        /// <returns>The deleted holding.</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<Holding?> DeleteTransactionById(Guid? holdingId)
+        {
+            try
+            {
+                var holding = await _dbContext.Holdings
+                    .Include(h => h.Transaction)
+                    .Include(h => h.Summary)
+                    .FirstOrDefaultAsync(h => h.Id == holdingId);
+
+                if (holding == null)
+                {
+                    return null ;
+                }
+
+                _dbContext.Remove(holding);
+                await _dbContext.SaveChangesAsync();
+                return holding;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Get all transaction with full details.
         /// </summary>
         /// <returns>List of Holdings with full details.</returns>

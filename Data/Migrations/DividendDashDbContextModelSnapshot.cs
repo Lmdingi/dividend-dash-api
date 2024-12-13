@@ -32,21 +32,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("SummaryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Symbol")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TransactionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("SummaryId");
-
-                    b.HasIndex("TransactionId");
 
                     b.ToTable("Holdings");
                 });
@@ -58,33 +48,41 @@ namespace Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Dividend")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("DividendCharges")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateOnly>("DividendDate")
                         .HasColumnType("date");
 
                     b.Property<decimal>("DividendTotal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateOnly>("ExDate")
                         .HasColumnType("date");
 
                     b.Property<decimal>("Gross")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<Guid>("HoldingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<decimal>("Net")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("Profit")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("TotalCharges")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HoldingId")
+                        .IsUnique();
 
                     b.ToTable("Summaries");
                 });
@@ -96,42 +94,60 @@ namespace Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Closing")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("ClosingCharges")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("ClosingTotal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<Guid>("HoldingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<decimal>("Opening")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("OpeningCharges")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("OpeningTotal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HoldingId")
+                        .IsUnique();
 
                     b.ToTable("Transactions");
                 });
 
+            modelBuilder.Entity("Data.Domain.Summary", b =>
+                {
+                    b.HasOne("Data.Domain.Holding", "Holding")
+                        .WithOne("Summary")
+                        .HasForeignKey("Data.Domain.Summary", "HoldingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Holding");
+                });
+
+            modelBuilder.Entity("Data.Domain.Transaction", b =>
+                {
+                    b.HasOne("Data.Domain.Holding", "Holding")
+                        .WithOne("Transaction")
+                        .HasForeignKey("Data.Domain.Transaction", "HoldingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Holding");
+                });
+
             modelBuilder.Entity("Data.Domain.Holding", b =>
                 {
-                    b.HasOne("Data.Domain.Summary", "Summary")
-                        .WithMany()
-                        .HasForeignKey("SummaryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Domain.Transaction", "Transaction")
-                        .WithMany()
-                        .HasForeignKey("TransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Summary");
 
                     b.Navigation("Transaction");

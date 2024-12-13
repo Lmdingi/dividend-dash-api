@@ -54,7 +54,21 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            await _transactionService.CreateTransactionTransactionAsyc(holdingDto);
+            await _transactionService.CreateTransactionAsyc(holdingDto);
+
+            return Ok(holdingDto);
+        }
+
+        [HttpDelete]
+        [Route("{holdingId:guid}")]
+        public async Task<IActionResult> DeleteTransactionById([FromRoute] Guid? holdingId)
+        {
+            if (holdingId == null)
+            {
+                return BadRequest();
+            }
+            
+            var holdingDto = await _transactionService.DeleteTransactionById(holdingId);
 
             return Ok(holdingDto);
         }
