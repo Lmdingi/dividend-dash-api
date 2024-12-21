@@ -27,8 +27,10 @@ namespace Services.Logic.Implementation
         {
             try
             {
-
-                holdingDto.Transaction.OpeningTotal = holdingDto.Transaction.Opening + holdingDto.Transaction.OpeningCharges;
+                if (holdingDto.Transaction != null)
+                {
+                    holdingDto.Transaction.OpeningTotal = holdingDto.Transaction.Opening + holdingDto.Transaction.OpeningCharges;
+                }
 
                 var holding = _mapper.Map<Holding>(holdingDto);
 
@@ -116,6 +118,21 @@ namespace Services.Logic.Implementation
         {
             try
             {
+                if (holdingDto.Transaction != null )
+                {
+                    holdingDto.Transaction.ClosingTotal = holdingDto.Transaction.Closing + holdingDto.Transaction.ClosingCharges;
+                }
+
+                if (holdingDto.Summary != null && holdingDto.Transaction != null)
+                {
+                    holdingDto.Summary.DividendTotal = holdingDto.Summary.Dividend + holdingDto.Summary.DividendCharges;
+                    holdingDto.Summary.TotalCharges = holdingDto.Transaction.OpeningCharges + holdingDto.Transaction.ClosingCharges + holdingDto.Summary.DividendCharges;
+                    holdingDto.Summary.Gross = holdingDto.Transaction.ClosingTotal + holdingDto.Summary.DividendTotal;
+                    holdingDto.Summary.Net = holdingDto.Transaction.Closing + holdingDto.Summary.Dividend;
+                    holdingDto.Summary.Profit = holdingDto.Summary.Net - holdingDto.Transaction.OpeningTotal;
+                }
+
+
                 var holding = _mapper.Map<Holding>(holdingDto);
 
                 holding = await _transactionRepository.UpdateTransactionAsyc(holding);
