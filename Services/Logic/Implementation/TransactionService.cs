@@ -32,6 +32,8 @@ namespace Services.Logic.Implementation
                     holdingDto.Transaction.OpeningTotal = holdingDto.Transaction.Opening + holdingDto.Transaction.OpeningCharges;
                 }
 
+                holdingDto.Name = ToTitleCase(holdingDto.Name);
+                holdingDto.Symbol = holdingDto?.Symbol?.ToUpper();
                 var holding = _mapper.Map<Holding>(holdingDto);
 
                 holding = await _transactionRepository.UpdateTransactionAsyc(holding);
@@ -132,7 +134,8 @@ namespace Services.Logic.Implementation
                     holdingDto.Summary.Profit = holdingDto.Summary.Net - holdingDto.Transaction.OpeningTotal;
                 }
 
-
+                holdingDto.Name = ToTitleCase(holdingDto.Name);
+                holdingDto.Symbol = holdingDto?.Symbol?.ToUpper();
                 var holding = _mapper.Map<Holding>(holdingDto);
 
                 holding = await _transactionRepository.UpdateTransactionAsyc(holding);
@@ -148,6 +151,22 @@ namespace Services.Logic.Implementation
             {
                 return null;
             }
+        }
+
+        private static string ToTitleCase (string? text)
+        {
+            string newText = string.Empty;
+
+            for(int i = 0; i < text?.Length; i++)
+            {
+                if(i == 0 || text[(i - 1)] == ' ')
+                {
+                    newText += char.ToUpper(text[i]);
+                    continue;
+                }
+                newText += text[i];
+            }
+            return newText;
         }
     }
 }
