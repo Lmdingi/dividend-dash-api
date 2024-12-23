@@ -71,11 +71,11 @@ namespace Services.Logic.Implementation
             }
         }
 
-        public async Task<List<HoldingDto?>?> GetAllTransactionsAsyc()
+        public async Task<List<HoldingDto?>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection)
         {
             try
             {
-                var holdings = await _transactionRepository.GetAllTransactionsAsyc();
+                var holdings = await _transactionRepository.GetAllTransactionsAsyc(sortBy, sortDirection);
 
                 if (holdings != null)
                 {

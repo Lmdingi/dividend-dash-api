@@ -19,9 +19,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTransactions()
+        public async Task<IActionResult> GetAllTransactions([FromQuery] string? sortBy, [FromQuery] string? sortDirection)
         {
-            var holdingDtos = await _transactionService.GetAllTransactionsAsyc();
+            var holdingDtos = await _transactionService.GetAllTransactionsAsyc(sortBy, sortDirection);
             return Ok(holdingDtos);
         }
 
