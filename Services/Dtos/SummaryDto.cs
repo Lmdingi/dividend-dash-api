@@ -14,7 +14,9 @@ namespace Services.Dtos
         public DateOnly ExDate { get; set; }
         [Required]
         public DateOnly DividendDate { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "The Dividend value must be 0 or greater.")]
         public decimal Dividend { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "The Dividend Commission value must be 0 or greater.")]
         public decimal DividendCharges { get; set; }
         public decimal DividendTotal { get; set; }
 

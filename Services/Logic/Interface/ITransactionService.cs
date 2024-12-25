@@ -1,4 +1,5 @@
-﻿using Services.Dtos;
+﻿using Data.Domain;
+using Services.Dtos;
 
 namespace Services.Logic.Interface
 {
@@ -9,5 +10,6 @@ namespace Services.Logic.Interface
         Task<HoldingDto?> UpdateTransactionAsyc(HoldingDto holdingDto);
         Task<HoldingDto?> CreateTransactionAsyc(HoldingDto holdingDto);
         Task<HoldingDto?> DeleteTransactionById(Guid? holdingId);
+        Task<TotalsDto> GetTotals();
     }
 }

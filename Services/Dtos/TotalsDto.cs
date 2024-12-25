@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Services.Dtos
+{
+    public class TotalsDto
+    {
+        public decimal Portfolio { get; set; }
+        public decimal Commission { get; set; }
+        public decimal Profit { get; set; }
+    }
+}

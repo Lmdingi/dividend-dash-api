@@ -121,6 +121,41 @@ namespace Data.Repository.Implementation
 
         }
 
+        public async Task<Totals> GetTotals()
+        {
+            try
+            {
+                var opening = await _dbContext.Holdings
+                    .Select(h => h.Transaction.Opening)
+                    .ToListAsync();
+
+                var charges = await _dbContext.Holdings
+                    .Select(h => h.Summary.TotalCharges)
+                    .ToListAsync();
+
+                var profit = await _dbContext.Holdings
+                    .Select(h => h.Summary.Profit)
+                    .ToListAsync();
+
+                if (opening != null && charges != null && profit != null)
+                {
+                    var totals = new Totals()
+                    {
+                        Portfolio = opening,
+                        Profit = profit,
+                        Commission = charges
+                    };
+                    return totals;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// get a holding with full details by id
         /// </summary>

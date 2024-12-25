@@ -168,5 +168,26 @@ namespace Services.Logic.Implementation
             }
             return newText;
         }
+
+        public async Task<TotalsDto> GetTotals()
+        {
+            try
+            {
+                var totals = await _transactionRepository.GetTotals();
+
+                var totalsDto = new TotalsDto()
+                {
+                    Commission = totals.Commission.Sum(),
+                    Portfolio = totals.Portfolio.Sum(),
+                    Profit = totals.Profit.Sum(),
+                };
+
+                return totalsDto;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

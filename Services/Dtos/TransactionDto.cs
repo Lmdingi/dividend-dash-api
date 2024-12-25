@@ -15,8 +15,9 @@ namespace Services.Dtos
         [Required, Range(0, double.MaxValue, ErrorMessage = "The Opening Commission value must be 0 or greater.")]
         public decimal OpeningCharges { get; set; }
         public decimal OpeningTotal { get; set; }
-
+        [Range(0, double.MaxValue, ErrorMessage = "The Closing value must be 0 or greater.")]
         public decimal Closing { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "The Closing Commission value must be 0 or greater.")]
         public decimal ClosingCharges { get; set; }
         public decimal ClosingTotal { get; set; }
     }

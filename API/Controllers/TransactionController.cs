@@ -33,6 +33,15 @@ namespace API.Controllers
             return Ok(holdingDto);
         }
 
+        [HttpGet]
+        [Route("get-totals")]
+        public  async Task<IActionResult> GetTotals()
+        {
+            var totals = await _transactionService.GetTotals();
+            return Ok(totals);
+        }
+
+
         [HttpPut]
         public async Task<IActionResult> UpdateTransaction([FromBody] HoldingDto holdingDto)
         {
