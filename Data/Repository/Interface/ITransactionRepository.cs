@@ -10,7 +10,7 @@ namespace Data.Repository.Interface
     public interface ITransactionRepository
     {
         Task<Holding?> CreateTransactionAsyc(Holding holding);
-        Task<List<Holding>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection);
+        Task<List<Holding>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection, int? pageNmber = 1, int? pageSize = 100);
         Task<Holding?> GetTransactionByIdAsyc(Guid id);
         Task<Holding?> UpdateTransactionAsyc(Holding holding);
         Task<Holding?> DeleteTransactionById(Guid? holdingId);

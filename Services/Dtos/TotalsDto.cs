@@ -13,5 +13,6 @@ namespace Services.Dtos
         public decimal IncomeCommission { get; set; }
         public decimal Net { get; set; }
         public decimal Profit { get; set; }
+        public int AllHoldingsCount { get; set; }
     }
 }

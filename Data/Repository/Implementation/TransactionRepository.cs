@@ -72,14 +72,14 @@ namespace Data.Repository.Implementation
         /// </summary>
         /// <returns>List of Holdings with full details.</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<List<Holding>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection)
+        public async Task<List<Holding>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection, int? pageNmber = 1, int? pageSize = 100)
         {
             try
             {
                 var query = _dbContext.Holdings.AsQueryable();
                 query = query.Include(h => h.Transaction)
                     .Include(h => h.Summary);
-
+                // srting
                 if(string.IsNullOrEmpty(sortBy) == false)
                 {
                     var isAsc = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase) ? true : false;
@@ -108,8 +108,11 @@ namespace Data.Repository.Implementation
                     {
                         query = isAsc ? query.OrderBy(h => h.Summary.DividendDate) : query.OrderByDescending(h => h.Summary.DividendDate);
                     }
+                }
 
-                }  
+                // paginating
+                var skipResults = (pageNmber - 1) * pageSize;
+                query = query.Skip(skipResults ?? 0).Take(pageSize ?? 100);
 
                 return await query.ToListAsync();               
                 
@@ -148,6 +151,8 @@ namespace Data.Repository.Implementation
                     .Select(h => h.Summary.Net)
                     .ToListAsync();
 
+                var allHoldingsTotal = await _dbContext.Holdings.CountAsync();
+
                 if (opening != null && openingCommission != null && profit != null)
                 {
                     var totals = new Totals()
@@ -157,7 +162,8 @@ namespace Data.Repository.Implementation
                         OpeningCommission = openingCommission,
                         Net = net,
                         DivCommission = divCommission,
-                        ClosingCommission = closingCommission
+                        ClosingCommission = closingCommission,
+                        AllHoldingsCount = allHoldingsTotal
                     };
                     return totals;
                 }

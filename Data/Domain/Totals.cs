@@ -14,5 +14,6 @@ namespace Data.Domain
         public List<decimal> ClosingCommission { get; set; }
         public List<decimal> Net { get; set; }
         public List<decimal> Profit { get; set; }
+        public int AllHoldingsCount { get; set; }
     }
 }

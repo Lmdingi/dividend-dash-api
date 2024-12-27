@@ -5,7 +5,7 @@ namespace Services.Logic.Interface
 {
     public interface ITransactionService
     {
-        Task<List<HoldingDto?>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection);
+        Task<List<HoldingDto?>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection, int? pageNuber, int? pageSize);
         Task<HoldingDto?> GetTransactionByIdAsyc(Guid id);
         Task<HoldingDto?> UpdateTransactionAsyc(HoldingDto holdingDto);
         Task<HoldingDto?> CreateTransactionAsyc(HoldingDto holdingDto);

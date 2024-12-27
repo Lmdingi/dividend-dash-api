@@ -72,11 +72,11 @@ namespace Services.Logic.Implementation
             }
         }
 
-        public async Task<List<HoldingDto?>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection)
+        public async Task<List<HoldingDto?>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection, int? pageNuber, int? pageSize)
         {
             try
             {
-                var holdings = await _transactionRepository.GetAllTransactionsAsyc(sortBy, sortDirection);
+                var holdings = await _transactionRepository.GetAllTransactionsAsyc(sortBy, sortDirection, pageNuber, pageSize);
 
                 if (holdings != null)
                 {
@@ -192,6 +192,7 @@ namespace Services.Logic.Implementation
                     Portfolio = totals.Portfolio.Sum(),
                     Net = totals.Net.Sum(),
                     Profit = totals.Profit.Sum(),
+                    AllHoldingsCount = totals.AllHoldingsCount
                 };
 
                 return totalsDto;
