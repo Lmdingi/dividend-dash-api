@@ -129,21 +129,35 @@ namespace Data.Repository.Implementation
                     .Select(h => h.Transaction.Opening)
                     .ToListAsync();
 
-                var charges = await _dbContext.Holdings
-                    .Select(h => h.Summary.TotalCharges)
+                var openingCommission = await _dbContext.Holdings
+                    .Select(h => h.Transaction.OpeningCharges)
                     .ToListAsync();
+
+                var divCommission = await _dbContext.Holdings
+                    .Select(h => h.Summary.DividendCharges)
+                    .ToListAsync();
+                var closingCommission = await _dbContext.Holdings
+                    .Select(h => h.Transaction.ClosingCharges)
+                    .ToListAsync();     
 
                 var profit = await _dbContext.Holdings
                     .Select(h => h.Summary.Profit)
                     .ToListAsync();
 
-                if (opening != null && charges != null && profit != null)
+                var net = await _dbContext.Holdings
+                    .Select(h => h.Summary.Net)
+                    .ToListAsync();
+
+                if (opening != null && openingCommission != null && profit != null)
                 {
                     var totals = new Totals()
                     {
                         Portfolio = opening,
                         Profit = profit,
-                        Commission = charges
+                        OpeningCommission = openingCommission,
+                        Net = net,
+                        DivCommission = divCommission,
+                        ClosingCommission = closingCommission
                     };
                     return totals;
                 }

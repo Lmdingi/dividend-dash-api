@@ -9,7 +9,9 @@ namespace Services.Dtos
     public class TotalsDto
     {
         public decimal Portfolio { get; set; }
-        public decimal Commission { get; set; }
+        public decimal OpeningCommission { get; set; }
+        public decimal IncomeCommission { get; set; }
+        public decimal Net { get; set; }
         public decimal Profit { get; set; }
     }
 }

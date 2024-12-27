@@ -9,7 +9,10 @@ namespace Data.Domain
     public class Totals
     {
         public List<decimal> Portfolio { get; set; }
-        public List<decimal> Commission { get; set; }
+        public List<decimal> OpeningCommission { get; set; }
+        public List<decimal> DivCommission { get; set; }
+        public List<decimal> ClosingCommission { get; set; }
+        public List<decimal> Net { get; set; }
         public List<decimal> Profit { get; set; }
     }
 }
