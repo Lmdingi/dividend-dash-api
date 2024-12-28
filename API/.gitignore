@@ -5,6 +5,7 @@
 # Ignore appsettings files
 appsettings.json
 appsettings.*.json
+
 # dotenv files
 .env
 
