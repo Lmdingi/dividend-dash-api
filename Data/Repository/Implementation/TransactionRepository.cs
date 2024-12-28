@@ -72,21 +72,49 @@ namespace Data.Repository.Implementation
         /// </summary>
         /// <returns>List of Holdings with full details.</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<List<Holding?>?> GetAllTransactionsAsyc()
+        public async Task<List<Holding>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection, int? pageNmber = 1, int? pageSize = 100)
         {
             try
             {
-                var holdings = await _dbContext.Holdings
-                .Include(h => h.Transaction)
-                .Include(h => h.Summary)
-                .ToListAsync();
-
-                if(holdings != null)
+                var query = _dbContext.Holdings.AsQueryable();
+                query = query.Include(h => h.Transaction)
+                    .Include(h => h.Summary);
+                // srting
+                if(string.IsNullOrEmpty(sortBy) == false)
                 {
-                    return holdings;
+                    var isAsc = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase) ? true : false;
+
+                    if (string.Equals(sortBy, "Name", StringComparison.OrdinalIgnoreCase))
+                    {   
+                        query = isAsc? query.OrderBy(h => h.Name): query.OrderByDescending(h => h.Name);
+                    }
+
+                    if (string.Equals(sortBy, "Symbol", StringComparison.OrdinalIgnoreCase))
+                    {
+                        query = isAsc ? query.OrderBy(h => h.Symbol) : query.OrderByDescending(h => h.Symbol);
+                    }
+
+                    if (string.Equals(sortBy, "OpeningTotal", StringComparison.OrdinalIgnoreCase))
+                    {
+                        query = isAsc ? query.OrderBy(h => h.Transaction.OpeningTotal) : query.OrderByDescending(h => h.Transaction.OpeningTotal);
+                    }
+
+                    if (string.Equals(sortBy, "ExDate", StringComparison.OrdinalIgnoreCase))
+                    {
+                        query = isAsc ? query.OrderBy(h => h.Summary.ExDate) : query.OrderByDescending(h => h.Summary.ExDate);
+                    }
+
+                    if (string.Equals(sortBy, "DividendDate", StringComparison.OrdinalIgnoreCase))
+                    {
+                        query = isAsc ? query.OrderBy(h => h.Summary.DividendDate) : query.OrderByDescending(h => h.Summary.DividendDate);
+                    }
                 }
 
-                return null;
+                // paginating
+                var skipResults = (pageNmber - 1) * pageSize;
+                query = query.Skip(skipResults ?? 0).Take(pageSize ?? 100);
+
+                return await query.ToListAsync();               
                 
             }
             catch (Exception ex)
@@ -94,6 +122,58 @@ namespace Data.Repository.Implementation
                 return null;
             }           
 
+        }
+
+        public async Task<Totals> GetTotals()
+        {
+            try
+            {
+                var opening = await _dbContext.Holdings
+                    .Select(h => h.Transaction.Opening)
+                    .ToListAsync();
+
+                var openingCommission = await _dbContext.Holdings
+                    .Select(h => h.Transaction.OpeningCharges)
+                    .ToListAsync();
+
+                var divCommission = await _dbContext.Holdings
+                    .Select(h => h.Summary.DividendCharges)
+                    .ToListAsync();
+                var closingCommission = await _dbContext.Holdings
+                    .Select(h => h.Transaction.ClosingCharges)
+                    .ToListAsync();     
+
+                var profit = await _dbContext.Holdings
+                    .Select(h => h.Summary.Profit)
+                    .ToListAsync();
+
+                var net = await _dbContext.Holdings
+                    .Select(h => h.Summary.Net)
+                    .ToListAsync();
+
+                var allHoldingsTotal = await _dbContext.Holdings.CountAsync();
+
+                if (opening != null && openingCommission != null && profit != null)
+                {
+                    var totals = new Totals()
+                    {
+                        Portfolio = opening,
+                        Profit = profit,
+                        OpeningCommission = openingCommission,
+                        Net = net,
+                        DivCommission = divCommission,
+                        ClosingCommission = closingCommission,
+                        AllHoldingsCount = allHoldingsTotal
+                    };
+                    return totals;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         /// <summary>

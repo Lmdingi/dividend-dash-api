@@ -19,9 +19,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTransactions()
+        public async Task<IActionResult> GetAllTransactions([FromQuery] string? sortBy, [FromQuery] string? sortDirection, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
         {
-            var holdingDtos = await _transactionService.GetAllTransactionsAsyc();
+            var holdingDtos = await _transactionService.GetAllTransactionsAsyc(sortBy, sortDirection, pageNumber, pageSize);
             return Ok(holdingDtos);
         }
 
@@ -32,6 +32,15 @@ namespace API.Controllers
             var holdingDto = await _transactionService.GetTransactionByIdAsyc(id);
             return Ok(holdingDto);
         }
+
+        [HttpGet]
+        [Route("get-totals")]
+        public  async Task<IActionResult> GetTotals()
+        {
+            var totals = await _transactionService.GetTotals();
+            return Ok(totals);
+        }
+
 
         [HttpPut]
         public async Task<IActionResult> UpdateTransaction([FromBody] HoldingDto holdingDto)
@@ -72,6 +81,5 @@ namespace API.Controllers
 
             return Ok(holdingDto);
         }
-
     }
 }

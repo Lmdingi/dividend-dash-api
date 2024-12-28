@@ -27,11 +27,14 @@ namespace Services.Logic.Implementation
         {
             try
             {
-                if (holdingDto.Transaction != null)
+                if (holdingDto.Transaction != null && holdingDto.Summary != null)
                 {
                     holdingDto.Transaction.OpeningTotal = holdingDto.Transaction.Opening + holdingDto.Transaction.OpeningCharges;
+                    holdingDto.Summary.TotalCharges = holdingDto.Transaction.OpeningCharges;
                 }
 
+                holdingDto.Name = ToTitleCase(holdingDto.Name);
+                holdingDto.Symbol = holdingDto?.Symbol?.ToUpper();
                 var holding = _mapper.Map<Holding>(holdingDto);
 
                 holding = await _transactionRepository.UpdateTransactionAsyc(holding);
@@ -69,11 +72,11 @@ namespace Services.Logic.Implementation
             }
         }
 
-        public async Task<List<HoldingDto?>?> GetAllTransactionsAsyc()
+        public async Task<List<HoldingDto?>?> GetAllTransactionsAsyc(string? sortBy, string? sortDirection, int? pageNuber, int? pageSize)
         {
             try
             {
-                var holdings = await _transactionRepository.GetAllTransactionsAsyc();
+                var holdings = await _transactionRepository.GetAllTransactionsAsyc(sortBy, sortDirection, pageNuber, pageSize);
 
                 if (holdings != null)
                 {
@@ -126,13 +129,20 @@ namespace Services.Logic.Implementation
                 if (holdingDto.Summary != null && holdingDto.Transaction != null)
                 {
                     holdingDto.Summary.DividendTotal = holdingDto.Summary.Dividend + holdingDto.Summary.DividendCharges;
-                    holdingDto.Summary.TotalCharges = holdingDto.Transaction.OpeningCharges + holdingDto.Transaction.ClosingCharges + holdingDto.Summary.DividendCharges;
-                    holdingDto.Summary.Gross = holdingDto.Transaction.ClosingTotal + holdingDto.Summary.DividendTotal;
-                    holdingDto.Summary.Net = holdingDto.Transaction.Closing + holdingDto.Summary.Dividend;
-                    holdingDto.Summary.Profit = holdingDto.Summary.Net - holdingDto.Transaction.OpeningTotal;
+
+                    holdingDto.Summary.TotalCharges = (holdingDto.Transaction.OpeningCharges
+                        + holdingDto.Transaction.ClosingCharges
+                        + holdingDto.Summary.DividendCharges);
+
+                    holdingDto.Summary.Gross = (holdingDto.Transaction.ClosingTotal + holdingDto.Summary.DividendTotal);
+
+                    holdingDto.Summary.Net = (holdingDto.Transaction.Closing + holdingDto.Summary.Dividend);
+
+                    holdingDto.Summary.Profit = (holdingDto.Summary.Net - holdingDto.Transaction.OpeningTotal);
                 }
 
-
+                holdingDto.Name = ToTitleCase(holdingDto.Name);
+                holdingDto.Symbol = holdingDto?.Symbol?.ToUpper();
                 var holding = _mapper.Map<Holding>(holdingDto);
 
                 holding = await _transactionRepository.UpdateTransactionAsyc(holding);
@@ -143,6 +153,49 @@ namespace Services.Logic.Implementation
                 }
 
                 return _mapper.Map<HoldingDto>(holding);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        private static string ToTitleCase (string? text)
+        {
+            string newText = string.Empty;
+
+            for(int i = 0; i < text?.Length; i++)
+            {
+                if(i == 0 || text[(i - 1)] == ' ')
+                {
+                    newText += char.ToUpper(text[i]);
+                    continue;
+                }
+                newText += text[i];
+            }
+            return newText;
+        }
+
+        public async Task<TotalsDto> GetTotals()
+        {
+            try
+            {
+                var totals = await _transactionRepository.GetTotals();
+
+                var incomeCommission = totals.DivCommission.Sum();
+                incomeCommission += totals.ClosingCommission.Sum();
+
+                var totalsDto = new TotalsDto()
+                {
+                    OpeningCommission = totals.OpeningCommission.Sum(),
+                    IncomeCommission = incomeCommission,
+                    Portfolio = totals.Portfolio.Sum(),
+                    Net = totals.Net.Sum(),
+                    Profit = totals.Profit.Sum(),
+                    AllHoldingsCount = totals.AllHoldingsCount
+                };
+
+                return totalsDto;
             }
             catch (Exception ex)
             {
