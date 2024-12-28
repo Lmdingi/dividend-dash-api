@@ -42,8 +42,7 @@
               "RelativeToolTip": "Services\\Logic\\Implementation\\TransactionService.cs",
               "ViewState": "AgIAAHAAAAAAAAAAAAAqwIMAAABtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-13T13:05:32.113Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-13T13:05:32.113Z"
             },
             {
               "$type": "Document",
@@ -65,7 +64,7 @@
               "RelativeDocumentMoniker": "API\\Controllers\\TransactionController.cs",
               "ToolTip": "C:\\Users\\Dan Tec Gaming\\source\\repos\\dividend-dash\\dividend-dash-api\\API\\Controllers\\TransactionController.cs",
               "RelativeToolTip": "API\\Controllers\\TransactionController.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAowDIAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAqwDIAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-12T17:04:14.114Z",
               "EditorCaption": ""
@@ -80,8 +79,7 @@
               "RelativeToolTip": "Data\\AppDbContext\\DividendDashDbContext.cs",
               "ViewState": "AgIAAEoAAAAAAAAAAAAkwGQAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-12T16:30:13.988Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-12T16:30:13.988Z"
             }
           ]
         }
